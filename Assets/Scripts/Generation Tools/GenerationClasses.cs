@@ -129,6 +129,7 @@ namespace Assets.Scripts.Generation_Tools
 
                     if (i == 0) width--;
                 }
+
             }
         }
         public void SetDimensions(Coord dim)

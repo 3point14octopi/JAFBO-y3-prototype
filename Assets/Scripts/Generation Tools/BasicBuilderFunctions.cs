@@ -14,8 +14,7 @@ namespace Assets.Scripts.Generation_Tools
 
             for (int i = start.x; i != (start.x + stride); i += step)
             {
-                Coord current = new Coord(i, start.y);
-                space.SetCell(current, pathType);
+                space.SetCell(new Coord(i, start.y), pathType);
             }
         }
         public static void VerticalPath(Space2D space, Cell pathType, Coord start, int stride)
@@ -24,8 +23,7 @@ namespace Assets.Scripts.Generation_Tools
 
             for (int i = start.y; i != (start.y + stride); i += step)
             {
-                Coord current = new Coord(start.x, i);
-                space.SetCell(current, pathType);
+                space.SetCell(new Coord(start.x, i), pathType);
             }
         }
         public static int CalculateStride(Coord end, Coord start, bool isXStride)
@@ -50,7 +48,7 @@ namespace Assets.Scripts.Generation_Tools
             else
             {
                 VerticalPath(space, pathValue, a, stride2);
-                HorizontalPath(space, pathValue, new Coord(b.x, a.y), stride1);
+                HorizontalPath(space, pathValue, new Coord(a.x, b.y), stride1);
             }
 
             if(RNG.GenRand(0, 2) == 1)
@@ -231,7 +229,7 @@ namespace Assets.Scripts.Generation_Tools
             if ((start.y - 1) > -1)
             {
 
-                if (((mustMatchCType) ? new Cell(space.GetCell(new Coord(start.x, start.y - 1))) == cType : space.GetCell(new Coord(start.x, start.y - 1)) > 0))
+                if ((mustMatchCType && new Cell(space.GetCell(new Coord(start.x, start.y - 1))) == cType) || (space.GetCell(new Coord(start.x, start.y - 1)) > 0 && !mustMatchCType))
                 {
                     up = true;
                 }
@@ -240,7 +238,7 @@ namespace Assets.Scripts.Generation_Tools
             if ((start.y + 1) < space.height)
             {
 
-                if (((mustMatchCType) ? new Cell(space.GetCell(new Coord(start.x, start.y + 1))) == cType : space.GetCell(new Coord(start.x, start.y + 1)) > 0))
+                if ((mustMatchCType && space.GetCell(new Coord(start.x, start.y + 1)) == cType.value) || (space.GetCell(new Coord(start.x, start.y + 1)) > 0 && !mustMatchCType))
                 {
                     down = true;
                 }
@@ -249,7 +247,7 @@ namespace Assets.Scripts.Generation_Tools
             if ((start.x - 1) > -1)
             {
 
-                if (((mustMatchCType) ? new Cell(space.GetCell(new Coord(start.x - 1, start.y))) == cType : space.GetCell(new Coord(start.x - 1, start.y)) > 0))
+                if ((mustMatchCType && space.GetCell(new Coord(start.x - 1, start.y)) == cType.value) || (space.GetCell(new Coord(start.x - 1, start.y)) > 0 && !mustMatchCType))
                 {
                     left = true;
                 }
@@ -258,7 +256,7 @@ namespace Assets.Scripts.Generation_Tools
             if ((start.x + 1) < space.width)
             {
 
-                if (((mustMatchCType) ? new Cell(space.GetCell(new Coord(start.x + 1, start.y))) == cType : space.GetCell(new Coord(start.x + 1, start.y)) > 0))
+                if ((mustMatchCType && space.GetCell(new Coord(start.x + 1, start.y)) == cType.value) || (space.GetCell(new Coord(start.x + 1, start.y)) > 0 && !mustMatchCType))
                 {
                     right = true;
                 }
@@ -270,7 +268,8 @@ namespace Assets.Scripts.Generation_Tools
             }
             else
             {
-                surrounding.y = ((down)?1 : 0) - ((up)?1:0);
+                if (down) surrounding.y = 1; else surrounding.y = 0;
+                if (up) surrounding.y -= 1;
             }
 
             if (!left && !right)
@@ -279,7 +278,8 @@ namespace Assets.Scripts.Generation_Tools
             }
             else
             {
-                surrounding.x = ((right)?1:0) - ((left)?1:0);
+                if (right) surrounding.y = 1; else surrounding.y = 0;
+                if (left) surrounding.y -= 1;
             }
 
             return surrounding;
@@ -295,7 +295,7 @@ namespace Assets.Scripts.Generation_Tools
             if ((start.y - 1) > -1 && (start.x - 1) > -1)
             {
 
-                if (((mustMatchCType) ? space.GetCell(new Coord(start.x - 1, start.y - 1)) == cType.value : space.GetCell(new Coord(start.x - 1, start.y - 1)) > 0))
+                if ((mustMatchCType && space.GetCell(new Coord(start.x - 1, start.y - 1)) == cType.value) || (space.GetCell(new Coord(start.x - 1, start.y - 1)) > 0 && !mustMatchCType))
                 {
                     lUp = true;
                 }
@@ -304,7 +304,7 @@ namespace Assets.Scripts.Generation_Tools
             if ((start.y + 1) < space.height && (start.x - 1) > -1)
             {
 
-                if (((mustMatchCType) ? space.GetCell(new Coord(start.x - 1, start.y + 1)) == cType.value : space.GetCell(new Coord(start.x - 1, start.y + 1)) > 0))
+                if ((mustMatchCType && space.GetCell(new Coord(start.x - 1, start.y + 1)) == cType.value || (space.GetCell(new Coord(start.x - 1, start.y + 1)) > 0 && !mustMatchCType)))
                 {
                     lDown = true;
                 }
@@ -313,7 +313,7 @@ namespace Assets.Scripts.Generation_Tools
             if ((start.x + 1) < space.width && (start.y - 1) > -1)
             {
 
-                if (((mustMatchCType) ? space.GetCell(new Coord(start.x + 1, start.y - 1)) == cType.value : space.GetCell(new Coord(start.x - 1, start.y)) > 0))
+                if ((mustMatchCType && space.GetCell(new Coord(start.x + 1, start.y - 1)) == cType.value || (space.GetCell(new Coord(start.x - 1, start.y)) > 0 && !mustMatchCType)))
                 {
                     rUp = true;
                 }
@@ -322,7 +322,7 @@ namespace Assets.Scripts.Generation_Tools
             if ((start.x + 1) < space.width && (start.y + 1) < space.height)
             {
 
-                if (((mustMatchCType) ? space.GetCell(new Coord (start.x + 1, start.y + 1)) == cType.value : space.GetCell(new Coord(start.x + 1, start.y)) > 0))
+                if ((mustMatchCType && space.GetCell(new Coord (start.x + 1, start.y + 1)) == cType.value || (space.GetCell(new Coord(start.x + 1, start.y)) > 0 && !mustMatchCType)))
                 {
                     rDown = true;
                 }
@@ -335,7 +335,8 @@ namespace Assets.Scripts.Generation_Tools
             }
             else
             {
-                surrounding.y = ((lDown) ? 1 : 0) - ((lUp) ? 1 : 0);
+                if (lDown) surrounding.y = 1; else surrounding.y = 0;
+                if (lUp) surrounding.y -= 1;
             }
 
             if (!rUp && !rDown)
@@ -344,7 +345,8 @@ namespace Assets.Scripts.Generation_Tools
             }
             else
             {
-                surrounding.x = ((rDown) ? 1 : 0) - ((rUp) ? 1 : 0);
+                if (rDown) surrounding.y = 1; else surrounding.y = 0;
+                if (rUp) surrounding.y -= 1;
             }
 
             return surrounding;

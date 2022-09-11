@@ -9,9 +9,10 @@ namespace Assets.Scripts.Generation_Tools
     public static class ArenaGenFunctions_Prototype { 
         public static void ArenaPrototype(Space2D arena)
         {
-            BasicBuilderFunctions.Flood(arena, new Cell(0), new Cell(1), 0, 0, 29, 29);
+            BasicBuilderFunctions.Flood(arena, new Cell(0), new Cell(1), 1, 1, 29, 29);
 			MakeRiver(arena);
 			MakeClusters(arena);
+			MakeSpacedOut(arena, new Cell(1));
         }
 
         public static void MakeRiver(Space2D arena)
@@ -62,7 +63,7 @@ namespace Assets.Scripts.Generation_Tools
 		}
 		public static void MakeSpacedOut(Space2D arena, Cell validSpace)
         {
-			int keepGoing = 12;
+			int keepGoing = 30;
 			for (int i = 0; i < RNG.GenRand(3, 5); i++)
 			{
 				bool valid = false;
@@ -93,6 +94,11 @@ namespace Assets.Scripts.Generation_Tools
 				}
 
 			}
+
+			if(keepGoing == 0)
+            {
+				UnityEngine.Debug.Log("damn, that's a bit cringe");
+            }
 		}
 	
     }
