@@ -14,7 +14,24 @@ namespace Assets.Scripts.Generation_Tools
             b = a;
             a = temp;
         }
+        public static float PercentageOf(Space2D space, Cell tileType)
+        {
+            int tCount = 0;
+            for (int i = 0; i < space.height; i++)
+            {
+                for (int j = 0; j < space.width; j++)
+                {
+                    if (space.GetCell(new Coord(j, i)) == tileType.value)
+                    {
+                        tCount++;
+                    }
+                }
+            }
+
+            return ((float)tCount / space.area());
+        }
     }
+
 
 
 
@@ -30,7 +47,7 @@ namespace Assets.Scripts.Generation_Tools
             return new Coord((GenRand(inclusive, space.width - (inclusive * 2))), (GenRand(inclusive, space.height - (inclusive * 2))));
 
         }
-        public static Coord CircleSelect(List<Coord> coords, int start)
+        public static T CircleSelect<T>(List<T> coords, int start)
         {
             if(start < coords.Count)
             {
@@ -46,5 +63,5 @@ namespace Assets.Scripts.Generation_Tools
         }
 
     }
-
+      
 }

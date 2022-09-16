@@ -149,22 +149,6 @@ namespace Assets.Scripts.Generation_Tools
             }
             return true;
         }
-        public static float PercentageOf(Space2D space, Cell tileType)
-        {
-            int tCount = 0;
-            for(int i = 0; i < space.height; i++)
-            {
-                for(int j = 0; j < space.width; j++)
-                {
-                    if (space.GetCell(new Coord(j, i)) == tileType.value)
-                    {
-                        tCount++;
-                    }
-                }
-            }
-
-            return ((float)tCount / space.area());
-        }
         public static void Flood(Space2D space, Cell toReplace, Cell newValue, int xStart = 0, int yStart = 0, int xEnd = 0, int yEnd = 0)
         {
             xEnd = (xEnd == 0) ? space.width : xEnd;

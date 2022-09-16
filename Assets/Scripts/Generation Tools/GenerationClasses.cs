@@ -10,7 +10,7 @@ namespace Assets.Scripts.Generation_Tools
         public int x;
         public int y;
         public int z;
-
+        
         public Coord(int xV = 0, int yV = 0, int zV = 0) {
             x = xV;
             y = yV;
